@@ -43,8 +43,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     git reset --hard ${A1111_RELEASE} && \
     python -c "from launch import prepare_environment; prepare_environment()" --skip-torch-cuda-test
 
-COPY --from=download /sdxlAnime_v31.safetensors /stable-diffusion-webui/models/Stable-diffusion/sdxlAnime_v31.safetensors
-COPY --from=download /sdxl_vae.safetensors /stable-diffusion-webui/models/VAE/sdxlAnime_v31.safetensors
+COPY --from=download sdxlAnime_v31.safetensors /stable-diffusion-webui/models/Stable-diffusion/sdxlAnime_v31.safetensors
+COPY --from=download sdxl_vae.safetensors /stable-diffusion-webui/models/VAE/sdxlAnime_v31.safetensors
 
 # Install RunPod SDK
 RUN --mount=type=cache,target=/root/.cache/pip \
