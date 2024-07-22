@@ -7,8 +7,11 @@ FROM alpine/git:2.43.0 as download
 # NOTE: CivitAI usually requires an API token, so you need to add it in the header
 #       of the wget command if you're using a model from CivitAI.
 RUN apk add --no-cache axel && \
-    axel "https://civitai.com/api/download/models/174317?type=Model&format=SafeTensor&size=pruned&fp=fp16" --quiet
-RUN axel "https://civitai.com/api/download/models/174317?type=VAE&format=SafeTensor" --quiet
+    axel "https://civitai.com/api/download/models/174317?type=Model&format=SafeTensor&size=pruned&fp=fp16" -o sdxlAnime_v31.safetensors --quiet
+RUN axel "https://civitai.com/api/download/models/174317?type=VAE&format=SafeTensor" -o sdxl_vae.safetensors --quiet
+RUN ls -l && \
+    file sdxlAnime_v31.safetensors && \
+    file sdxl_vae.safetensors
 
 # ---------------------------------------------------------------------------- #
 #                        Stage 2: Build the final image                        #
