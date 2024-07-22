@@ -6,9 +6,13 @@ FROM alpine/git:2.43.0 as download
 
 # NOTE: CivitAI usually requires an API token, so you need to add it in the header
 #       of the wget command if you're using a model from CivitAI.
+WORKDIR /downloads
+
 RUN apk add --no-cache axel file && \
     axel "https://civitai.com/api/download/models/174317?type=Model&format=SafeTensor&size=pruned&fp=fp16" -o sdxlAnime_v31.safetensors --quiet
+
 RUN axel "https://civitai.com/api/download/models/174317?type=VAE&format=SafeTensor" -o sdxl_vae.safetensors --quiet
+
 RUN ls -l && \
     file sdxlAnime_v31.safetensors && \
     file sdxl_vae.safetensors
@@ -46,8 +50,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     git reset --hard ${A1111_RELEASE} && \
     python -c "from launch import prepare_environment; prepare_environment()" --skip-torch-cuda-test
 
-COPY --from=download sdxlAnime_v31.safetensors /stable-diffusion-webui/models/Stable-diffusion/sdxlAnime_v31.safetensors
-COPY --from=download sdxl_vae.safetensors /stable-diffusion-webui/models/VAE/sdxlAnime_v31.safetensors
+COPY --from=download /downloads/sdxlAnime_v31.safetensors /stable-diffusion-webui/models/Stable-diffusion/sdxlAnime_v31.safetensors
+COPY --from=download /downloads/sdxl_vae.safetensors /stable-diffusion-webui/models/VAE/sdxlAnime_v31.safetensors
+
 
 # Install RunPod SDK
 RUN --mount=type=cache,target=/root/.cache/pip \
